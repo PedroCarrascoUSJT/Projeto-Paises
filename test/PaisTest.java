@@ -1,3 +1,5 @@
+package test;
+
 import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.*;
@@ -6,10 +8,12 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import java.util.*;
+import service.PaisService;
+import model.Pais;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PaisTest {
-
+	PaisService paisService;
 	Pais pais, copia;
 	static int id = 0;
 
@@ -19,6 +23,7 @@ public class PaisTest {
 		System.out.println("setup");
 		pais = new Pais(id, "Vietnã", 90623000, 331212);
 		copia = new Pais(id, "Vietnã", 90623000, 331212);
+		paisService = new PaisService();
 		System.out.println(pais);
 		System.out.println(copia);
 		System.out.println(id);
@@ -29,8 +34,8 @@ public class PaisTest {
 		System.out.println("carregar");
 		Pais fixture = new Pais(1, "Brasil", 190755799, 8514876.00 );
 		Pais novo = new Pais(1, null, -1, -1);
-		System.out.println("ID ANTES DA CONSULTA:"+novo.getId());
-		novo.carregar();
+		PaisService novoService = new PaisService();
+		novo = novoService.carregar(1);
 		System.out.println(fixture);
 		System.out.println(novo);
 		assertEquals("testa inclusao", novo, fixture);
@@ -39,8 +44,7 @@ public class PaisTest {
 	@Test
 	public void test01Criar() {
 		System.out.println("criar");
-		pais.criar();
-		id = pais.getId();
+		id = paisService.criar(pais);
 		System.out.println(id);
 		copia.setId(id);
 		assertEquals("testa criacao", pais, copia);
@@ -51,8 +55,8 @@ public class PaisTest {
 		System.out.println("atualizar");
 		pais.setPopulacao(12342312135623123L);
 		copia.setPopulacao(12342312135623123L);		
-		pais.atualizar();
-		pais.carregar();
+		paisService.atualizar(pais);
+		pais = paisService.carregar(pais.getId());
 		assertEquals("testa atualizacao", pais, copia);
 	}
 
@@ -63,8 +67,8 @@ public class PaisTest {
 		copia.setNome(null);
 		copia.setPopulacao(-1);
 		copia.setArea(-1);
-		pais.excluir();
-		pais.carregar();
+		paisService.excluir(pais.getId());
+		pais = paisService.carregar(pais.getId());
 		assertEquals("testa exclusao", pais, copia);
 	}
 	
@@ -75,7 +79,7 @@ public class PaisTest {
 		copia.setNome("Vietnã");
 		copia.setPopulacao(12342312135623123L);
 		copia.setArea(331212.00);
-		pais.carregaMaiorPopulacao();
+		pais = paisService.carregaMaiorPopulacao();
 		assertEquals("testa carregar maior populacao", pais, copia);
 	}
 	
@@ -86,7 +90,7 @@ public class PaisTest {
 		copia.setNome("Vietnã");
 		copia.setPopulacao(12342312135623123L);
 		copia.setArea(331212.00);
-		pais.carregarMenorArea();
+		pais = paisService.carregarMenorArea();
 		assertEquals("testa carregar menor area", pais, copia);
 	}
 	
@@ -98,7 +102,7 @@ public class PaisTest {
 		paisesComparar[1] = new Pais(2, "Japão", 127300000, 377899.00);
 		paisesComparar[2] = new Pais(3, "Canadá", 35546000, 9984670.00);
 		
-		Object[] paises = pais.vetorTresPaises().toArray();
+		Object[] paises = paisService.vetorTresPaises().toArray();
 		
 		
 		assertArrayEquals("testa carregar vetor 3 paises", paises, paisesComparar);

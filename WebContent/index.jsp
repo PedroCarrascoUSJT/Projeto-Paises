@@ -19,7 +19,7 @@
     <!-- Container Principal -->
     <div id="main" class="container">
         <h3 class="page-header">Incluir Países</h3>
-        <form action="ManterPais.do" method="post">
+        <form action="controller.do" method="post">
             <!-- area de campos do form -->
             <div class="row">
                 <div class="form-group col-md-12">
@@ -38,6 +38,7 @@
                     <input type="number" step="0.01" class="form-control" name="area" required id="area" placeholder="Digite a área do país">
                 </div>
             </div>
+            <input type="hidden" name="command" value="ManterPais">
             <hr />
             <div id="actions" class="row">
                 <div class="col-md-12">
